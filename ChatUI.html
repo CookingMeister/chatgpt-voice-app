@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ChatGPT Voice Assistant</title>
+    <link rel="stylesheet" href="stylesUI.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okaidia.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="app-container">
+      <header class="app-header">
+        <h1>
+          <i class="fas fa-robot" aria-hidden="true"></i> ChatGPT Voice
+          Assistant
+        </h1>
+        <p>Chat with AI using voice or text</p>
+      </header>
+
+      <main class="app-main">
+        <div class="chat-workspace">
+          <!-- Controls Section -->
+          <section class="controls-section">
+            <aside class="settings-panel" id="settingsPanel">
+              <header class="panel-header">
+                <button
+                  class="panel-toggle"
+                  id="settingsToggle"
+                  onclick="toggleSettings()"
+                  aria-label="Toggle Settings"
+                  aria-expanded="false"
+                >
+                  <i
+                    class="fas fa-cog"
+                    id="settingsIcon"
+                    aria-hidden="true"
+                  ></i>
+                  <span class="panel-title">Settings</span>
+                </button>
+              </header>
+
+              <div class="panel-content" id="settingsContent">
+                <fieldset class="setting-group">
+                  <label for="selModel" class="setting-label">
+                    <i class="fas fa-cogs" aria-hidden="true"></i> Model:
+                  </label>
+                  <select id="selModel" class="form-select">
+                    <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
+                    <option value="gpt-4">GPT-4</option>
+                    <option value="gpt-4-turbo-preview">GPT-4 Turbo</option>
+                    <option value="gpt-4.1">GPT-4.1</option>
+                  </select>
+                </fieldset>
+
+                <fieldset class="setting-group">
+                  <label for="selLang" class="setting-label">
+                    <i class="fas fa-language" aria-hidden="true"></i> Language:
+                  </label>
+                  <select
+                    id="selLang"
+                    class="form-select"
+                    onchange="ChangeLang(this)"
+                  >
+                    <option value="en-US">English (US)</option>
+                    <option value="en-GB">English (UK)</option>
+                    <option value="es-ES">Spanish</option>
+                    <option value="fr-FR">French</option>
+                    <option value="de-DE">German</option>
+                    <option value="it-IT">Italian</option>
+                    <option value="pt-BR">Portuguese (Brazil)</option>
+                    <option value="ja-JP">Japanese</option>
+                    <option value="ko-KR">Korean</option>
+                    <option value="zh-CN">Chinese (Simplified)</option>
+                  </select>
+                </fieldset>
+
+                <fieldset class="setting-group">
+                  <label for="selVoices" class="setting-label">
+                    <i class="fas fa-volume-up" aria-hidden="true"></i> Voice:
+                  </label>
+                  <select id="selVoices" class="form-select">
+                    <option value="">Default Voice</option>
+                  </select>
+                </fieldset>
+
+                <fieldset class="setting-group">
+                  <label class="checkbox-label">
+                    <input
+                      type="checkbox"
+                      id="chkMute"
+                      onchange="Mute(this.checked)"
+                    />
+                    <span class="checkbox-indicator"></span>
+                    <i class="fas fa-volume-mute" aria-hidden="true"></i
+                    ><span class="check-text"> Mute Voice</span>
+                  </label>
+                </fieldset>
+
+                <fieldset class="setting-group" id="lblSpeak">
+                  <label class="checkbox-label">
+                    <input
+                      type="checkbox"
+                      id="chkSpeak"
+                      onchange="SpeechToText()"
+                    />
+                    <span class="checkbox-indicator"></span>
+                    <i class="fas fa-microphone" aria-hidden="true"></i>
+                    <span class="check-text"> Voice Input</span>
+                  </label>
+                </fieldset>
+              </div>
+            </aside>
+
+            <section class="input-section">
+              <div class="input-wrapper">
+                <textarea
+                  id="txtMsg"
+                  class="message-input"
+                  placeholder="Type your message here..."
+                  rows="3"
+                  onkeydown="handleKeyPress(event)"
+                  aria-label="Message input"
+                ></textarea>
+                <div class="action-buttons">
+                  <button id="btnSend" onclick="Send()" class="btn btn-primary">
+                    <i class="fas fa-paper-plane" aria-hidden="true"></i>
+                    Send
+                  </button>
+                  <button
+                    id="btnClear"
+                    onclick="ClearConversation()"
+                    class="btn btn-secondary"
+                  >
+                    <i class="fas fa-trash" aria-hidden="true"></i>
+                    Clear
+                  </button>
+                </div>
+              </div>
+            </section>
+          </section>
+
+          <!-- Chat Display Section -->
+          <section class="chat-display hidden" id="chatOutput" role="main">
+            <div id="chatMessages" class="message-container">
+              <div class="conversation-placeholder">
+                Start a conversation by typing or using voice...
+              </div>
+            </div>
+          </section>
+
+          <!-- Hidden Elements -->
+          <textarea
+            id="conversation-log"
+            class="sr-only"
+            aria-hidden="true"
+          ></textarea>
+          <output
+            class="speech-indicator"
+            id="idText"
+            aria-live="polite"
+          ></output>
+        </div>
+      </main>
+
+      <footer class="app-footer">
+        <div class="status-item">
+          <span id="statusText">Ready</span>
+        </div>
+        <div class="status-item">
+          <span id="messageCount">Messages: 0</span>
+        </div>
+      </footer>
+    </div>
+
+    <dialog
+      id="loadingOverlay"
+      class="loading-overlay"
+      aria-label="Loading"
+    >
+      <div class="loading-content">
+        <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+        <p>Thinking...</p>
+      </div>
+    </dialog>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-css.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
+

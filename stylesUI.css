@@ -18,7 +18,7 @@
   --error-color: #e53e3e;
   --success-color: #38a169;
   --message-bg: rgba(225, 222, 250, 0.95);
-  
+
   /* Spacing */
   --spacing-xs: 6px;
   --spacing-sm: 10px;
@@ -26,14 +26,14 @@
   --spacing-lg: 20px;
   --spacing-xl: 25px;
   --spacing-2xl: 30px;
-  
+
   /* Border Radius */
   --radius-sm: 10px;
   --radius-md: 12px;
   --radius-lg: 16px;
   --radius-xl: 20px;
   --radius-2xl: 24px;
-  
+
   /* Shadows */
   --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.1);
@@ -41,25 +41,26 @@
   --shadow-xl: 0 12px 48px rgba(0, 0, 0, 0.15);
   --shadow-primary: 0 4px 15px rgba(102, 126, 234, 0.3);
   --shadow-primary-hover: 0 6px 20px rgba(102, 126, 234, 0.4);
-  
+
   /* Transitions */
   --transition-fast: 0.2s ease;
   --transition-normal: 0.3s ease;
   --transition-slow: 0.4s ease;
   --transition-layout: 0.6s ease-in-out;
-  
+
   /* Typography */
-  --font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    sans-serif;
   --font-mono: "Consolas", "Monaco", "Courier New", monospace;
   --font-size-sm: 0.85rem;
   --font-size-base: 0.95rem;
   --font-size-lg: 1.1rem;
   --font-size-xl: 2.5rem;
   --line-height: 1.6;
-  
+
   /* Layout */
-  --max-width: 1200px;
-  --panel-width: 280px;
+  --max-width: 900px;
+  --panel-width: 235px;
   --panel-width-min: 50px;
 }
 
@@ -151,6 +152,8 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: relative;
+  z-index: -1;
 }
 
 /* ===== CHAT WORKSPACE ===== */
@@ -166,6 +169,7 @@ body {
   transition: var(--transition-layout);
   height: fit-content;
   flex: 1;
+  position: relative;
 }
 
 .controls-section {
@@ -280,6 +284,7 @@ body {
 .settings-panel.expanded {
   width: var(--panel-width);
   min-width: var(--panel-width);
+  z-index: 1001;
 }
 
 .settings-panel.expanded .panel-header {
@@ -563,7 +568,12 @@ body {
 
 .message-separator {
   height: 1px;
-  background: linear-gradient(90deg, transparent, var(--text-secondary), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--text-secondary),
+    transparent
+  );
   margin: var(--spacing-lg) 0;
   position: relative;
 }
@@ -652,7 +662,7 @@ body {
 /* ===== LAYOUT STATES ===== */
 .chat-workspace.compact {
   position: relative;
-  top: 20vh;
+  top: 10vh;
   height: fit-content;
   min-height: auto;
 }
@@ -801,88 +811,120 @@ body {
 /* ===== RESPONSIVE DESIGN ===== */
 @media (max-width: 768px) {
   .app-container {
-    padding: var(--spacing-md);
+    padding: var(--spacing-sm);
     gap: var(--spacing-md);
+    max-width: 95%;
   }
-  
+
+  .app-container > *,
+  .settings-panel {
+    transform: scale(0.9);
+  }
+
   .app-header {
     padding: var(--spacing-lg);
   }
-  
+
   .app-header h1 {
-    font-size: 2rem;
+    font-size: 1.8rem;
   }
-  
+
   .chat-workspace {
     padding: var(--spacing-lg);
+    position: relative;
+    z-index: auto;
   }
-  
-  .controls-section {
-    flex-direction: column;
+
+  .chat-workspace.compact {
+    top: 0vh;
+  }
+
+ .controls-section {
     gap: var(--spacing-md);
   }
-  
+
   .settings-panel {
     max-width: 100%;
     width: 100%;
   }
   
-  .settings-panel.minimized {
-    width: 100%;
-    min-width: 100%;
+  .settings-panel.expanded {
+    top: -1.25rem;
+    left: -.55rem;
+    position: absolute;
+    transition: all var(--transition-normal);
+    z-index:10001 !important;
   }
-  
+
   .input-wrapper {
     flex-direction: column;
     align-items: stretch;
   }
-  
+
   .action-buttons {
     flex-direction: row;
     justify-content: center;
   }
-  
+
   .message-input {
     min-height: 50px;
   }
-  
+
   .user-message,
   .assistant-message {
     max-width: 90%;
   }
-  
+
   .app-footer {
     flex-direction: column;
     gap: var(--spacing-xs);
     text-align: center;
+    z-index: -1;
+    position: relative;
   }
 }
 
 @media (max-width: 480px) {
+
   .app-container {
-    padding: var(--spacing-sm);
+    padding: var(--spacing-xs);
+    /* margin-top: 0; */
+    /* padding-top: 0; */
   }
-  
+
+  .app-container > *,
+  .settings-panel
+  {
+    transform: scale(0.85);
+  }
+
   .app-header h1 {
-    font-size: 1.8rem;
+    font-size: 1.5rem;
   }
-  
+
   .chat-workspace {
+    top: -3vh !important;
     padding: var(--spacing-md);
   }
-  
+
+   .settings-panel.expanded {
+    top: -2.67rem;
+    left: -1.35rem;
+    transform: scale(0.8);   
+  }
+
   .user-message,
   .assistant-message {
     max-width: 95%;
     font-size: 0.9rem;
   }
-  
+
   .btn {
     padding: var(--spacing-sm) var(--spacing-lg);
     font-size: var(--font-size-sm);
     min-width: 80px;
   }
-  
+
   .message-container {
     padding: var(--spacing-md);
   }
@@ -901,37 +943,37 @@ body {
     --glass-bg: rgba(45, 55, 72, 0.65);
     --glass-bg-light: rgba(45, 55, 72, 0.35);
   }
-  
+
   .form-select,
   .message-input {
     background: var(--bg-light);
     color: var(--text-primary);
   }
-  
+
   .assistant-message {
     background: var(--bg-light);
     color: var(--text-primary);
   }
-  
+
   .loading-content {
     background: var(--bg-light);
     color: var(--text-primary);
   }
-  
+
   .checkbox-indicator {
     background: var(--bg-light);
     border-color: var(--border-color);
   }
-  
+
   .assistant-message .message-content code {
     background: var(--bg-secondary);
     color: var(--primary-color);
   }
-  
+
   .assistant-message .message-content th {
     background: var(--bg-secondary);
   }
-  
+
   .assistant-message .message-content th,
   .assistant-message .message-content td {
     border-color: var(--border-color);
@@ -939,8 +981,37 @@ body {
 
   .assistant-message .message-content hr,
   .message-separator {
-    background: linear-gradient(90deg, transparent, var(--text-muted), transparent);
+    background: linear-gradient(
+      90deg,
+      transparent,
+      var(--text-muted),
+      transparent
+    );
   }
+
+  .assistant-message .message-content h1,
+  .assistant-message .message-content h2,
+  .assistant-message .message-content h3,
+  .assistant-message .message-content h4,
+  .assistant-message .message-content h5,
+  .assistant-message .message-content h6 {
+    color: var(--text-primary);
+  }
+  .assistant-message .message-content strong {
+    color: var(--text-primary);
+  }
+  .assistant-message .message-content em {
+    color: var(--text-secondary);
+  }
+  .assistant-message .message-content blockquote {
+    color: var(--text-secondary);
+  }
+
+.assistant-message .message-content pre {
+    background: #23272e; /* darker than #2d3748, or pick another contrasting color */
+    color: #fff;
+  }
+
   .message-separator::after {
     background: var(--message-bg);
     color: var(--text-muted);

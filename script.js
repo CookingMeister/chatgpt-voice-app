@@ -1,5 +1,5 @@
-// const OPENAI_API_KEY = "YOUR_API_KEY_HERE";
-const OPENAI_API_KEY = "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 ";
+const OPENAI_API_KEY = "YOUR_API_KEY_HERE";
+
 class ChatGPTClient {
   constructor() {
     this.isTextToSpeechSupported = false;
